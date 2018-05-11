@@ -32,7 +32,8 @@ unzip acl18confidence_data_model.zip
 ### Train a language model
 
 ```sh
-./train_lm.sh [ifttt|django]
+./train_lm.sh ifttt
+./train_lm.sh django
 ```
 
 ### Precompute all the confidence metrics, and perform uncertainty backpropagation
@@ -40,24 +41,32 @@ unzip acl18confidence_data_model.zip
 (This step can be skipped. The precomputed data have been cached in the zip file.)
 
 ```sh
-# arg2: use gpu 0
-./compute_metric.sh [ifttt|django] 0
-# The intermediate results are saved to "data_model/*/*.eval".
+# arg2: gpu id
+./compute_metric.sh ifttt 0
+./compute_metric.sh django 0
 ```
+
+The intermediate results are saved to "data_model/[ifttt|django]/*.eval".
 
 ## Usage
 
-### Train a confidence scoring model, and compute spearman's rho between confidence scores and F1
+### Confidence Estimation
+
+- Train a confidence scoring model.
+- Compute spearman's rho between confidence scores and F1 for the full model and ablation models (w/o model uncertainty, w/o data uncertainty, and w/o input uncertainty).
 
 ```sh
-# Evaluate full model and ablation models (w/o model uncertainty, w/o data uncertainty, and w/o input uncertainty).
-./train_scoring.sh [ifttt|django]
+./train_scoring.sh ifttt
+./train_scoring.sh django
 ```
 
-### Evaluate confidence backpropagation and attention-based method against inferred ground truth on the development set
+### Uncertainty Interpretation
+
+Evaluate confidence backpropagation and attention-based method against inferred ground truth.
 
 ```sh
-./eval_conf_bp_att.sh [ifttt|django]
+./eval_conf_bp_att.sh ifttt
+./eval_conf_bp_att.sh django
 ```
 
 ## Acknowledgments
